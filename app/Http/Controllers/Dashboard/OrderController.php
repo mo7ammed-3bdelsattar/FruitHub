@@ -42,7 +42,7 @@ class OrderController extends Controller
             ->thenReturn()
             ->with(['user', 'products', 'driver'])
             ->orderByRaw("FIELD(status ,'taken','preparing','delivering','received')")
-            ->paginate(15);
+            ->paginate(session('pagination'));
         return view('dashboard.pages.orders.index', compact('orders'));
     }
 

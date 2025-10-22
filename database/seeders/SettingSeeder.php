@@ -24,6 +24,7 @@ class SettingSeeder extends Seeder
             'success_text' => 'Your order have been taken and is being attended to.',
             'contact_us_text' => 'For inquiries, please reach out to us at',
             'terms_text' => 'By using our service, you agree to our terms and conditions.',
+            'pagination' => 5,
             'phone1' => '+201234567890',
             'phone2' => '+201287654321',
             'email' => 'info@fruithub.com',

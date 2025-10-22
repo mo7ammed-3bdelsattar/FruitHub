@@ -25,18 +25,16 @@ return new class extends Migration
             $table->text('success_text')->nullable();
             $table->text('contact_us_text')->nullable();
             $table->text('terms_text')->nullable();
-
+            $table->integer('pagination')->nullable();
+            
             $table->string('phone1')->nullable();
             $table->string('phone2')->nullable();
-            $table->string('whatsapp1')->nullable();
-            $table->string('whatsapp2')->nullable();
             $table->string('email')->nullable();
             $table->string('facebook')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('instagram')->nullable();
             $table->string('youtube')->nullable();
             $table->string('twitter')->nullable();
-            $table->string('pinterest')->nullable();
             $table->text('map')->nullable();
             
             $table->timestamps();

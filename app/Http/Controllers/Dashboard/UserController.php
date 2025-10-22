@@ -31,7 +31,7 @@ class UserController extends Controller
         ->thenReturn()
         ->with(['image','roles'])
         ->latest()
-        ->paginate(5);  
+        ->paginate(session('pagination'));  
         $roles = Role::all();
         return view('dashboard.pages.users.index', compact(['users','roles']));
     }

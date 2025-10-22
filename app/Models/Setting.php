@@ -23,15 +23,13 @@ class Setting extends Model
         'terms_text',
         'phone1',
         'phone2',
-        'whatsapp1',
-        'whatsapp2',
         'email',
         'facebook',
         'linkedin',
         'instagram',
         'youtube',
         'twitter',
-        'pinterest',
+        'pagination',
         'map',
     ];
 

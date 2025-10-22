@@ -31,7 +31,7 @@ class ProductController extends Controller
             ->thenReturn()
             ->with(['image', 'category', 'tags'])
             ->latest()
-            ->paginate(5);
+            ->paginate(session('pagination'));
         $tags = Tag::all();
         $categories = Category::all();
         return view('dashboard.pages.products.index', compact(['products', 'tags', 'categories']));

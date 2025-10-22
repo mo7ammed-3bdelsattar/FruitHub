@@ -28,7 +28,7 @@ class DriverController extends Controller
             )
             ->thenReturn()
             ->latest()
-            ->paginate(5);
+            ->paginate(session('pagination'));
         return view('dashboard.pages.drivers.index', compact('drivers'));
     }
 
