@@ -17,7 +17,7 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = auth()->user();
+        $user = auth()->user()?? '';
 
         if (!$user) {
             return redirect()->route('login')->withErrors(['error' => 'Please Login And Try Again!']);

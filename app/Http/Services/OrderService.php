@@ -6,9 +6,11 @@ namespace App\Http\Services;
 use PDOException;
 use Carbon\Carbon;
 use App\Models\Order;
+use App\Mail\OrderMail;
 use App\Helpers\ApiResponse;
 use App\Http\Services\CartService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderService
 {
@@ -27,7 +29,7 @@ class OrderService
         }
         return false;
     }
-    
+
 
     public static function cancel($request, $id)
     {
@@ -56,7 +58,7 @@ class OrderService
                 'status'  => 'taken',
                 'created_at' => now()
             ]);
-            $order->order_number='ORD'.Carbon::now()->year.''.$order->id;
+            $order->order_number = 'ORD' . Carbon::now()->year . '' . $order->id;
             $order->save();
             $order->orderTrackings()->create(['status' => 'taken']);
 
@@ -65,6 +67,7 @@ class OrderService
                     'quantity' => $item['quantity']
                 ]);
             }
+            Mail::to($order->user->email)->send(new OrderMail($order,'Your Order has been taken!'));
             DB::commit();
             return $order;
         } catch (PDOException $e) {

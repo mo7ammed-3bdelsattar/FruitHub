@@ -6,6 +6,7 @@ use PDOException;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Driver;
+use App\Mail\OrderMail;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Category;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
 use App\Http\Services\OrderService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -117,6 +119,7 @@ class OrderController extends Controller
         ]);
         $order->orderTrackings()->create(['status' => $request->input('status')]);
         $order->update(['status' => $request->input('status')]);
+        if($order->status == 'delivering') Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been delivering'));
         return true;
     }
 

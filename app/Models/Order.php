@@ -44,4 +44,8 @@ class Order extends Model
         return $this->belongsTo(Address::class);
     }
     
+    public function getAddress()
+    {
+        return $this->address->city->name . "/" . $this->address->street . '/' . $this->address->building ;
+    }
 }
