@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\UserController;
@@ -99,3 +100,6 @@ Route::apiResource('cart',CartController::class)->middleware('auth:sanctum');
 Route::apiResource('address',AddressController::class)->middleware('auth:sanctum');
 Route::get('users/{id}/addresses',[ AddressController::class,'getUserAddresses'])->middleware('auth.admin');
         
+
+Route::post('/payment/process', [PaymentController::class, 'paymentProcess']);
+Route::match(['GET','POST'],'/payment/callback', [PaymentController::class, 'callBack']);

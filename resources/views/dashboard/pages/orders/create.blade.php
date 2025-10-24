@@ -84,7 +84,7 @@
 
 <div class="container mt-4">
     <h3 class="mb-4 text-center fw-bold">Select a Category</h3>
-    
+
     <div class="row">
         @foreach($categories as $category)
         <div class="col-md-3 mb-4">
@@ -391,6 +391,23 @@ function viewCart() {
                     </div>
                 </div>
             </div>
+             <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <div class="input-group input-group-merge">
+                                    <div class="form-control d-flex">
+                                        <div class="form-check form-check-inline m-2">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="payment_cash" value="cash" onchange="selectPaymentMethod('cash')">
+                                            <label class="form-check-label">Cash on Delivery</label>
+                                        </div>
+                                        <div class="form-check form-check-inline m-2">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="payment_online" value="online" onchange="selectPaymentMethod('online')">
+                                            <label class="form-check-label">Online Payment</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
         `;
 
         container.innerHTML = tableHTML;
@@ -398,12 +415,19 @@ function viewCart() {
 
         cart['total'] = total;
 
+
         loadUsers();
 
         productsModal.hide();
         cartModal.show();
     }
 }
+
+
+function selectPaymentMethod(method){
+    cart['payment_method'] = method;
+}
+
 function loadAddress(addressId) {
     fetch(`/api/address/${addressId}`) 
         .then(res => res.json())
@@ -512,21 +536,18 @@ function submitOrder() {
     userIdInput.value = cart.user_id;
     form.appendChild(userIdInput);
     
+    const payment_method = document.createElement('input');
+    payment_method.type = 'hidden';
+    payment_method.name = 'payment_method';
+    payment_method.value = cart.payment_method;
+    form.appendChild(payment_method);   
+    
 
     document.body.appendChild(form);
     console.log('Submitting form with cart data:', cart);
     form.submit();
 }
 </script>
-@if(session('order_id'))
-<script>
-    console.log('skmlkfldknwl');
-    
-    window.addEventListener('load', function() {
-
-    });
-</script>
-@endif
 
 
 @endsection

@@ -21,7 +21,7 @@
                     <div class="my-4">
                         <p>{{ __('Current status : ') }} {{ $order->status }}</p>
                         <p>{{ __('subtotal : ') }} {{ $order->subtotal_price }} {{ __(' LE') }}</p>
-                        <p>{{ __('Shipping Cost : ') }} {{ $order->address->city->shipping_cost }} {{ __(' LE') }}</p>
+                        <p>{{ __('Shipping Cost : ') }} {{ $order->total_price - $order->subtotal_price }} {{ __(' LE') }}</p>
                         <h2 class="badge me-1" style="background-color: #000; color: #fff; text-align: center;">{{
                             __('Total: ') }}
                             {{ $order->total_price }} {{ __(' LE') }}</h2>
@@ -67,6 +67,15 @@
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{ __('Edit ')}}</h5>
+                    <form action="{{ route('dashboard.orders.update',$order->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method("PATCH")
+                        <input type="text" name="payment_method" id="" value="online" hidden>
+                    <button class="btn btn-sm btn-primary">
+                        Pay
+                    </button>
+                    </form>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('dashboard.orders.update',$order->id) }}" method="POST"
@@ -84,6 +93,21 @@
                                         @foreach ($drivers as $driver )
                                             <option value="{{ $driver->id }}" {{ $order->driver_id == $driver->id ?'selected': '' }}>{{ $driver->name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Payment Status</label>
+                            <div class="col-sm-10">
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                            class="bx bx-dollar"></i></span>
+                                    <select name="payment_status" id="" class="form-control">
+                                        <option value="">--Select Status--</option>
+                                        <option value="paid" {{ $order->payment_status == 'paid' ?'selected': '' }}>Paid</option>
+                                        <option value="pending" {{ $order->payment_status == 'pending' ?'selected': '' }}>pending</option>
+                                        <option value="failed" {{ $order->payment_status == 'failed' ?'selected': '' }}>failed</option>
                                     </select>
                                 </div>
                             </div>
@@ -110,10 +134,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Title</th>
-                                                    <th>Category</th>
-                                                    <th>Image</th>
                                                     <th>Price</th>
-                                                    <th>tags</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -122,19 +143,8 @@
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td><strong>{{ $product->title }}</strong></td>
-                                                    <td>{{ $product->category->name }}</td>
-                                                    <td>
-                                                        <img src="{{ App\Helpers\FileHelper::get_file_path($product->image?->path,'') }}"
-                                                            alt="Image" width="40" height="40" class="rounded-circle">
-                                                    </td>
                                                     <td><span class="badge bg-label-primary me-1">{{ $product->price
                                                             }}$</span></td>
-                                                    <td>@foreach ($product->tags->take(1) as $tag)
-                                                        <a href="?tag={{ $tag->id }}"><span
-                                                                class="badge bg-label-info me-1">{{ $tag->name
-                                                                }}</span></a>
-                                                        @endforeach
-                                                    </td>
                                                     <td>
                                                         <form
                                                             action="{{ route('dashboard.orders.item.delete',['orderId'=>$order->id , 'productId'=>$product->id]) }}"

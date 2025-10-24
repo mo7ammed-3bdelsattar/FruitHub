@@ -28,7 +28,6 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         abort_if(!auth()->user()->can('view orders'), 403);
-        $orders = Order::with(['products', 'user', 'driver'])->paginate(15);
         $request->validate([
             'search' => 'nullable|string|max:255'
         ]);
@@ -63,23 +62,32 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
+        // dd($request->payment_method);
         abort_if(!auth()->user()->can('create orders'), 403);
         $cartData = $request->all();
         $address = Address::find($cartData['address_id']);
         $cartData['total_price'] = $cartData['subtotal_price'] + $address->city->shipping_cost;
-        $order = OrderService::create($cartData);
+        $cartData['payment_method'] = $request->payment_method;
+
+        $orderData = OrderService::create($cartData);
+        $order = $orderData['order'];
         if (!$order) {
             return redirect()->back()->with('error', 'there an error happind');
         }
+        if ($request->payment_method == 'online') {
+            return OrderService::orderPayment($order);
+        }
+
         return to_route('dashboard.orders.invoice', $order->id)->with('success', 'order taken successfully');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function edit(string $id)
     {
         abort_if(!auth()->user()->can('edit orders'), 403);
+        $order = Order::with(['user', 'products'])->findOrFail($id);
         $drivers = Driver::all();
         return view('dashboard.pages.orders.edit', compact('order', 'drivers'));
     }
@@ -94,12 +102,18 @@ class OrderController extends Controller
         if ($request->filled('status') && $this->addStatus($request, $order)) {
             return redirect()->back()->with('success', 'Status add successfully!');
         }
+        if ($request->payment_method == 'online') {
+            return OrderService::orderPayment($order);
+        }
         $data = $request->validate([
-            'driver_id' => 'nullable|exists:drivers,id'
+            'driver_id' => 'nullable|exists:drivers,id',
+            'payment_status' => 'nullable|in:paid,pending,failed',
         ]);
         $order->update($data);
-        return redirect()->back()->with('success', 'Order Updated successfully!');
+        return to_route('dashboard.orders.index')->with('success', 'Order Updated successfully!');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -119,7 +133,7 @@ class OrderController extends Controller
         ]);
         $order->orderTrackings()->create(['status' => $request->input('status')]);
         $order->update(['status' => $request->input('status')]);
-        if($order->status == 'delivering') Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been delivering'));
+        if ($order->status == 'delivering') Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been delivering'));
         return true;
     }
 

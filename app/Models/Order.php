@@ -19,7 +19,9 @@ class Order extends Model
         'total_price',
         'status',
         'driver_id',
-        'subtotal_price'
+        'subtotal_price',
+        'payment_method',
+        'payment_status',
     ];
 
 

@@ -26,6 +26,9 @@ class OrderRequest extends FormRequest
             'address_id' => 'required|exists:addresses,id',
             'subtotal_price' => 'required|numeric',
             'status' => 'nullable|string|in:pending,processing,completed,cancelled',
+            'payment_method' => 'nullable|in:cash,online',
+            'payment_status' => 'nullable|in:paid,pending,failed',
+
         ];
     }
 }

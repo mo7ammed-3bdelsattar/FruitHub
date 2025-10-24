@@ -74,7 +74,7 @@ class CartService
                 'items'         => $items,
                 'subtotal_price'      => $subtotal_price,
                 'shipping cost' => $shipping_cost,
-                'total'         => $total,
+                'total_price'         => $total,
             ];
         } else {
             return null;

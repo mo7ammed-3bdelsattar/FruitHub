@@ -62,7 +62,7 @@
                             <th>User Phone</th>
                             <th>Status</th>
                             <th>Driver Name</th>
-                            <th>Driver phone</th>
+                            <th>Payment Status</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -71,13 +71,16 @@
                         @foreach ($orders as $order)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td><a href="{{ route('dashboard.orders.show',$order->id) }}"><span
+                            <td><a href="{{ route('dashboard.orders.edit',$order->id) }}"><span
                                         class="badge bg-label-primary me-1">{{ $order->order_number }}</span></a></td>
                             <td>{{ $order->user->name }}</td>
                             <td> {{ $order->user->phone }} </td>
                             <td> <span class="badge bg-label-primary me-1">{{ $order->status }}</span></td>
-                            <td> {{ $order->driver->name?? '' }} </td>
-                            <td> {{ $order->driver->phone?? '' }}</td>
+                            <td><a href="{{ route('dashboard.drivers.index').'?search='.($order->driver->name ?? '') }}"><span class="badge bg-label-primary me-1">{{ $order->driver->name??''}}</span></a></td>
+                            <td>
+                                <span class="badge bg-label-{{ $order->payment_method =='cash'? 'success' : 'primary' }} me-1">{{ $order->payment_method }} , </span>
+                                <span class="badge bg-label-{{ $order->payment_status =='paid'? 'success' : ($order->payment_status =='pending' ? 'warning' : 'danger') }} me-1">{{ $order->payment_status }}</span>
+                            </td>
                             <td> {{ $order->created_at->format('d/m H:i') ?? '' }}</td>
                             <td>
                                 <div class="dropdown">

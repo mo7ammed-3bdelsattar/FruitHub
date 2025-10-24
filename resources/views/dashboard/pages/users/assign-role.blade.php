@@ -13,21 +13,22 @@
                     <form action="{{ route('dashboard.users.role',$user->id) }}" method="POST">
                         @csrf
                         <div class="row mb-3">
-                        <label class="col-sm-2 form-label" for="basic-icon-default-message">Role</label>
-                        <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                                <div class="form-control d-flex">
-                                    @foreach ($roles as $role)
-                                    <div class="form-check form-check-inline m-2">
-                                        <input class="form-check-input" type="radio" name="role" id="role" {{ $user->hasRole($role->name)?'checked':'' }} value="{{ $role->name }}">
-                                        <label class="form-check-label" >{{ ucfirst($role->name) }}</label>
-                                    </div>                                        
-                                    @endforeach
+                            <label class="col-sm-2 form-label" for="basic-icon-default-message">Role</label>
+                            <div class="col-sm-10">
+                                <div class="input-group input-group-merge">
+                                    <div class="form-control d-flex">
+                                        @foreach ($roles as $role)
+                                        <div class="form-check form-check-inline m-2">
+                                            <input class="form-check-input" type="radio" name="role" id="role" {{
+                                                $user->hasRole($role->name)?'checked':'' }} value="{{ $role->name }}">
+                                            <label class="form-check-label">{{ ucfirst($role->name) }}</label>
+                                        </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
+                        </div>
                         <div class="row justify-content-end">
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-primary">Send</button>

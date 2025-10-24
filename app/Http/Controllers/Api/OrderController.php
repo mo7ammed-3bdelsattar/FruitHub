@@ -34,11 +34,11 @@ class OrderController extends Controller
         if ($request->user()->addresses()->find($address_id)->isEmpty()) {
             return ApiResponse::sendResponse(404, "This address is not belong to you or may not exist", []);
         }
-        $taken = OrderService::apiStore($request);
-        if (!$taken) {
-            return ApiResponse::sendResponse(200, "cart is empty", null);
+        $url = OrderService::apiStore($request);
+        if (!$url) {
+            return ApiResponse::sendResponse(200, "'Payment failed, please try again.'", null);
         }
-        return ApiResponse::sendResponse(201, "Order taken successfully", []);
+        return ApiResponse::sendResponse(201, "Order taken successfully", ['url'=>$url]);
     }
 
     /**

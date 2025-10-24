@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Dashboard\CityController;
@@ -69,5 +70,8 @@ Route::middleware('auth.admin')->prefix('dashboard')->as('dashboard.')->group(fu
         Route::delete('/image', 'destroyImage')->name('destroyImage');
     });
 });
+
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
 
 require __DIR__ . '/auth.php';
