@@ -62,22 +62,11 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        // dd($request->payment_method);
         abort_if(!auth()->user()->can('create orders'), 403);
-        $cartData = $request->all();
-        $address = Address::find($cartData['address_id']);
-        $cartData['total_price'] = $cartData['subtotal_price'] + $address->city->shipping_cost;
-        $cartData['payment_method'] = $request->payment_method;
-
-        $orderData = OrderService::create($cartData);
-        $order = $orderData['order'];
+        $order = OrderService::create($request->all());
         if (!$order) {
             return redirect()->back()->with('error', 'there an error happind');
         }
-        if ($request->payment_method == 'online') {
-            return OrderService::orderPayment($order);
-        }
-
         return to_route('dashboard.orders.invoice', $order->id)->with('success', 'order taken successfully');
     }
 

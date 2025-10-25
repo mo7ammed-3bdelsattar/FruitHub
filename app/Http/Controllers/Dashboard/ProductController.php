@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        abort_if(!auth()->user()->can('cteate products'), 403);
+        abort_if(!auth()->user()->can('create products'), 403);
         $request->validate([
             'tags' => 'required|array|exists:tags,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',

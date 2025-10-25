@@ -71,7 +71,7 @@ Route::middleware('auth.admin')->prefix('dashboard')->as('dashboard.')->group(fu
     });
 });
 
-Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-success/{id}', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
 
 require __DIR__ . '/auth.php';

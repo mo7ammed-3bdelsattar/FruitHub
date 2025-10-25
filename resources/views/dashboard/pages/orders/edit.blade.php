@@ -21,7 +21,8 @@
                     <div class="my-4">
                         <p>{{ __('Current status : ') }} {{ $order->status }}</p>
                         <p>{{ __('subtotal : ') }} {{ $order->subtotal_price }} {{ __(' LE') }}</p>
-                        <p>{{ __('Shipping Cost : ') }} {{ $order->total_price - $order->subtotal_price }} {{ __(' LE') }}</p>
+                        <p>{{ __('Shipping Cost : ') }} {{ $order->total_price - $order->subtotal_price }} {{ __(' LE')
+                            }}</p>
                         <h2 class="badge me-1" style="background-color: #000; color: #fff; text-align: center;">{{
                             __('Total: ') }}
                             {{ $order->total_price }} {{ __(' LE') }}</h2>
@@ -29,7 +30,7 @@
 
                 </div>
             </div>
-             <div class="card mb-4">
+            <div class="card mb-4">
                 <h5 class="card-header d-flex justify-content-between align-items-center">
                     Statuses Table
                     <!-- 🔍 Filter Form -->
@@ -67,16 +68,18 @@
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{ __('Edit ')}}</h5>
+                    @if($order->payment_method == 'online' && $order->payment_statud == 'paid')
                     <form action="{{ route('dashboard.orders.update',$order->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method("PATCH")
                         <input type="text" name="payment_method" id="" value="online" hidden>
-                    <button class="btn btn-sm btn-primary">
-                        Pay
-                    </button>
+                        <button class="btn btn-sm btn-primary">
+                            Pay
+                        </button>
                     </form>
-                </div>
+                    @endif
+                </div>  
                 <div class="card-body">
                     <form action="{{ route('dashboard.orders.update',$order->id) }}" method="POST"
                         enctype="multipart/form-data">
@@ -91,23 +94,28 @@
                                     <select name="driver_id" id="" class="form-control">
                                         <option value="">--Select Driver--</option>
                                         @foreach ($drivers as $driver )
-                                            <option value="{{ $driver->id }}" {{ $order->driver_id == $driver->id ?'selected': '' }}>{{ $driver->name }}</option>
+                                        <option value="{{ $driver->id }}" {{ $order->driver_id == $driver->id
+                                            ?'selected': '' }}>{{ $driver->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Payment Status</label>
+                            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Payment
+                                Status</label>
                             <div class="col-sm-10">
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text"><i
                                             class="bx bx-dollar"></i></span>
                                     <select name="payment_status" id="" class="form-control">
                                         <option value="">--Select Status--</option>
-                                        <option value="paid" {{ $order->payment_status == 'paid' ?'selected': '' }}>Paid</option>
-                                        <option value="pending" {{ $order->payment_status == 'pending' ?'selected': '' }}>pending</option>
-                                        <option value="failed" {{ $order->payment_status == 'failed' ?'selected': '' }}>failed</option>
+                                        <option value="paid" {{ $order->payment_status == 'paid' ?'selected': '' }}>Paid
+                                        </option>
+                                        <option value="pending" {{ $order->payment_status == 'pending' ?'selected': ''
+                                            }}>pending</option>
+                                        <option value="failed" {{ $order->payment_status == 'failed' ?'selected': ''
+                                            }}>failed</option>
                                     </select>
                                 </div>
                             </div>
@@ -166,7 +174,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
     @endsection

@@ -29,21 +29,23 @@ class PaymentController extends Controller
         // dd($request->merchant_order_id);
         if ($response) {
 
-            $orderId = $request->merchant_order_id; 
+            $orderId = $request->merchant_order_id;
             $order = Order::find($orderId);
             if ($order) {
                 $order->update(['payment_status' => 'paid']);
             }
-            return redirect()->route('payment.success');
+            return redirect()->route('payment.success',$orderId);
         }
 
         return redirect()->route('payment.failed');
     }
 
 
-    public function success()
+    public function success($orderId)
     {
-
+        if(auth()->user()->is_admin){
+        return to_route('dashboard.orders.invoice',$orderId )->with('success', 'order taken successfully');
+        }
         return view('payment-success');
     }
     public function failed()

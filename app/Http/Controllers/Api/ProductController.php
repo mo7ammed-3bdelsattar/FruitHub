@@ -29,7 +29,9 @@ class ProductController extends Controller
             ])
             ->thenReturn()
             ->with(['image', 'category', 'tags'])
-            ->paginate($request->input('per_page', 5));
+            ->paginate(5)
+            ->appends($request->query());
+            // dd($products);
         if ($products->isNotEmpty()) {
             $data = $this->formatProducts($products);
             return ApiResponse::sendResponse(200, "data retrieved successfully", $data);

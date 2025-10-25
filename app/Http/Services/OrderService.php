@@ -27,14 +27,7 @@ class OrderService
         $order = self::create($cartData);
         if (!empty($order)) {
             $user->cart->products()->detach();
-            $data = self::getPaymentData($order);
-            $paymentService = app(\App\Http\Services\PaymobPaymentService::class);
-            $paymentResponse = $paymentService->sendPayment($data);
-            if ($paymentResponse['success']) {
-                return $paymentResponse['url'];
-            } else {
-                return false;
-            }
+            return $order;
         }
         return false;
     }
@@ -77,6 +70,9 @@ class OrderService
                     'quantity' => $item['quantity']
                 ]);
             }
+            if ($order->payment_method == 'online') {
+                return self::orderPayment($order);
+            }
             // Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been taken!'));
             DB::commit();
             return $order;
@@ -106,9 +102,13 @@ class OrderService
         $paymentService = app(\App\Http\Services\PaymobPaymentService::class);
         $paymentResponse = $paymentService->sendPayment($data);
         if ($paymentResponse['success']) {
-            return redirect($paymentResponse['url']);
+            if (auth()->user()->is_admin) {
+                return redirect($paymentResponse['url']);
+            }
+            return ["url" => $paymentResponse['url']];
         } else {
-            return redirect()->back()->with('error', 'Payment failed, please try again.');
+            if (auth()->user()->is_admin) return redirect()->back()->with('error', 'Payment failed, please try again.');
+            else return false;
         }
     }
 }

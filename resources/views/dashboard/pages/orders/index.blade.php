@@ -60,6 +60,7 @@
                             <th>Order Number</th>
                             <th>User Name</th>
                             <th>User Phone</th>
+                            <th>Total Price</th>
                             <th>Status</th>
                             <th>Driver Name</th>
                             <th>Payment Status</th>
@@ -75,11 +76,11 @@
                                         class="badge bg-label-primary me-1">{{ $order->order_number }}</span></a></td>
                             <td>{{ $order->user->name }}</td>
                             <td> {{ $order->user->phone }} </td>
+                            <td> <span class="badge bg-label-success me-1">{{ $order->total_price }}</span></td>
                             <td> <span class="badge bg-label-primary me-1">{{ $order->status }}</span></td>
                             <td><a href="{{ route('dashboard.drivers.index').'?search='.($order->driver->name ?? '') }}"><span class="badge bg-label-primary me-1">{{ $order->driver->name??''}}</span></a></td>
                             <td>
-                                <span class="badge bg-label-{{ $order->payment_method =='cash'? 'success' : 'primary' }} me-1">{{ $order->payment_method }} , </span>
-                                <span class="badge bg-label-{{ $order->payment_status =='paid'? 'success' : ($order->payment_status =='pending' ? 'warning' : 'danger') }} me-1">{{ $order->payment_status }}</span>
+                                <span class="badge bg-label-{{ $order->payment_status =='paid'? 'success' : ($order->payment_status =='pending' ? 'warning' : 'danger') }} me-1">{{$order->payment_method .' , '. $order->payment_status }}</span>
                             </td>
                             <td> {{ $order->created_at->format('d/m H:i') ?? '' }}</td>
                             <td>

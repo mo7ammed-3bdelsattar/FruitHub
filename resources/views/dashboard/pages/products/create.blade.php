@@ -16,7 +16,8 @@
                                 <input type="text" class="form-control" name="title" id="basic-icon-default-fullname"
                                     placeholder="Product 1" aria-label="Product 1"
                                     aria-describedby="basic-icon-default-fullname2" />
-                            </div>
+                                </div>
+                                <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -25,7 +26,8 @@
                             <div class="input-group input-group-merge">
                                 <textarea name="description" id="basic-icon-default-description" class="form-control"
                                     placeholder="Product description"></textarea>
-                            </div>
+                                </div>
+                                <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
                     </div>
 
@@ -33,18 +35,21 @@
                         <label class="col-sm-2 col-form-label" for="basic-icon-default-price">price</label>
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                                <input type="text" name="price" id="basic-icon-default-price" class="form-control"
+                                <input type="number" name="price" id="basic-icon-default-price" class="form-control"
                                     placeholder="100" aria-describedby="basic-icon-default-price" />
-                            </div>
+                                </div>
+                                <x-input-error :messages="$errors->get('price')" class="mt-2" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="basic-icon-default-discount">Discount</label>
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                                <input type="text" name="discount" id="basic-icon-default-discount" class="form-control"
-                                    placeholder="15%" aria-describedby="basic-icon-default-discount" />
-                            </div>
+                                <input type="number" name="discount" id="basic-icon-default-discount"
+                                    class="form-control" placeholder="15%"
+                                    aria-describedby="basic-icon-default-discount" />
+                                </div>
+                                <x-input-error :messages="$errors->get('discount')" class="mt-2" />
                         </div>
                     </div>
 
@@ -56,16 +61,18 @@
 
                                 </select>
                             </div>
+                            <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-2 form-label" for="basic-icon-default-message">Tags</label>
                         <div class="col-sm-10">
                             <div class="input-group input-group-merge" id="tags">
-                                <div class="form-control d-flex" >
-                                    
+                                <div class="form-control d-flex">
+
                                 </div>
                             </div>
+                            <x-input-error :messages="$errors->get('tags')" class="mt-2" />
                         </div>
 
                     </div>
@@ -74,7 +81,8 @@
                         <div class="col-sm-10">
                             <input type="file" class="form-control" id="inputGroupFile04"
                                 aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image" />
-                        </div>
+                            </div>
+                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
                     </div>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
@@ -126,3 +134,12 @@
     loadCategories();
     loadTags();
 </script>
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('createModal'));
+            myModal.show();
+        });
+    </script>
+@endif
