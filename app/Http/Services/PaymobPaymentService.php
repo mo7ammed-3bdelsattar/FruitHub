@@ -31,23 +31,20 @@ class PaymobPaymentService extends BasePaymentService implements PaymentGatewayI
     protected function generateToken()
     {
         $response = $this->buildRequest('POST', '/api/auth/tokens', ['api_key' => $this->api_key]);
-        return $response->getData(true)['data']['token'];
+        return $response->getData(true)['data']['token']?? null;
     }
 
     public function sendPayment($data):array
     {
         $token =$this->generateToken();
         $this->header['Authorization'] = 'Bearer ' . $token;
-        //validate data before sending it
         $data['api_source'] = "INVOICE";
         $data['integrations'] = $this->integrations_id;
         $data['auth_token'] =$token;
         // dd($data);
         $response = $this->buildRequest('POST', '/api/ecommerce/orders', $data);
-        //handel payment response data and return it
         // dd($response);
         if ($response->getData(true)['success']) {
-
 
             return ['success' => true, 'url' => $response->getData(true)['data']['url']];
         }

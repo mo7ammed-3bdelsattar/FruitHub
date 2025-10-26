@@ -7,6 +7,7 @@ use PDOException;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Mail\OrderMail;
+use App\Jobs\OrderMailJob;
 use App\Helpers\ApiResponse;
 use App\Http\Services\CartService;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +53,7 @@ class OrderService
             if (count($data['items']) < 1) {
                 return false;
             }
+            // dd($data);
             $order = Order::create([
                 'user_id' => $data['user_id'],
                 'address_id' => $data['address_id'],
@@ -70,10 +72,7 @@ class OrderService
                     'quantity' => $item['quantity']
                 ]);
             }
-            if ($order->payment_method == 'online') {
-                return self::orderPayment($order);
-            }
-            // Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been taken!'));
+            OrderMailJob::dispatch($order);
             DB::commit();
             return $order;
         } catch (PDOException $e) {
@@ -101,6 +100,7 @@ class OrderService
         $data = self::getPaymentData($order);
         $paymentService = app(\App\Http\Services\PaymobPaymentService::class);
         $paymentResponse = $paymentService->sendPayment($data);
+        // dd($paymentResponse);
         if ($paymentResponse['success']) {
             if (auth()->user()->is_admin) {
                 return redirect($paymentResponse['url']);

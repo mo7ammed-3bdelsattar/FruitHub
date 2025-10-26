@@ -25,36 +25,36 @@ class RolePermissionSeeder extends Seeder
             'create products',
             'edit products',
             'delete products',
-            
+
             // Category permissions
             'view categories',
             'create categories',
             'edit categories',
             'delete categories',
-            
+
             // Tag permissions
             'view tags',
             'create tags',
             'edit tags',
             'delete tags',
-            
+
             // User permissions
             'view users',
             'create users',
             'edit users',
             'delete users',
-            
+
             // Role & Permission management
             'manage roles',
             'manage permissions',
-            
+
             // Order permissions
             'view orders',
             'create orders',
             'edit orders',
             'delete orders',
             'manage all orders',
-            
+
             // Location permissions
             'view location',
             'create location',
@@ -63,18 +63,19 @@ class RolePermissionSeeder extends Seeder
             'create cities',
             'edit cities',
             'delete cities',
-            
+
             // Setting permissions
             'view settings',
             'create settings',
             'edit settings',
             'delete settings',
-            
+
             // Driver permissions
             'view drivers',
             'create drivers',
             'edit drivers',
             'delete drivers',
+            'view dashboard',
         ];
 
         foreach ($permissions as $permission) {
@@ -108,6 +109,8 @@ class RolePermissionSeeder extends Seeder
             'view drivers',
             'create drivers',
             'edit drivers',
+            'view dashboard',
+
         ]);
 
         // Customer - Basic user permissions
@@ -130,7 +133,7 @@ class RolePermissionSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@gmail.com',
             'phone' => fake()->phoneNumber,
-            'is_admin'=> true,
+            'is_admin' => true,
             'password' => Hash::make('123456789'),
         ]);
         $adminUser->assignRole('admin');
@@ -139,7 +142,7 @@ class RolePermissionSeeder extends Seeder
             'name' => 'Manager User',
             'email' => 'manager@gmail.com',
             'phone' => fake()->phoneNumber,
-            'is_admin'=> true,
+            'is_admin' => true,
             'password' => Hash::make('123456789'),
         ]);
         $managerUser->assignRole('manager');
@@ -148,7 +151,7 @@ class RolePermissionSeeder extends Seeder
             'name' => 'Customer User',
             'email' => 'customer@gmail.com',
             'phone' => fake()->phoneNumber,
-            'is_admin'=> false,
+            'is_admin' => false,
             'password' => Hash::make('123456789'),
         ]);
         $customerUser->assignRole('customer');

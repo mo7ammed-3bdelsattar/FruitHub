@@ -16,7 +16,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'paymob_api_key' => env("PAYMOB_API_KEY",'ne5ra'),
+    'paymob_base_url' => env("PAYMOB_BASE_URL"),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -195,7 +196,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\PaymentServiceProvider::class,
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -211,6 +212,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
     ])->toArray(),
 
 ];

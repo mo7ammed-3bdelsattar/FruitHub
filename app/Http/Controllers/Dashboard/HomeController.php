@@ -35,7 +35,7 @@ class HomeController extends Controller
         ->groupBy('status')->get();
         $orderStatusCount =$results->pluck('total_orders','status');
         $totalPrice = $results->pluck('total_revenue','status')['received'] ?? 0;
-        $orderCount = $orderStatusCount['received'];
+        $orderCount = $orderStatusCount['received'] ?? 0;
         $customerCount = User::role('customer')->count();
 
         return view('dashboard.pages.home.index', compact(['topProducts', 'orderStatusCount', 'customerCount', 'orderCount', 'totalPrice', 'countProducts']));

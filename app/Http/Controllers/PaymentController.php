@@ -43,9 +43,6 @@ class PaymentController extends Controller
 
     public function success($orderId)
     {
-        if(auth()->user()->is_admin){
-        return to_route('dashboard.orders.invoice',$orderId )->with('success', 'order taken successfully');
-        }
         return view('payment-success');
     }
     public function failed()

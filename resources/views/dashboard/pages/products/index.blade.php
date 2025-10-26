@@ -4,6 +4,15 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
 
+
+        @can('create products')
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
+            Create Product
+        </button>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#importModal">
+            Import products
+        </button>
+        @endcan
         <div class="card">
             <h5 class="card-header d-flex justify-content-between align-items-center">
                 Products Table
@@ -53,13 +62,9 @@
                             step="10" value="{{ request('maxPrice', 1000) }}" style="width: 150px;">
                     </div>
                 </form>
-                @can('create products')
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
-                    Create Product
-                </button>
-                @endcan
             </h5>
             @include('dashboard.pages.products.create')
+            @include('dashboard.pages.products.import-file')
             <div class="table-responsive text-nowrap">
                 <table class="table table-sm align-middle mb-0">
                     <caption class="ms-4">

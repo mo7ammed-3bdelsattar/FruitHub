@@ -44,6 +44,6 @@
                 </g>
             </svg>
         </span>
-        <span class="app-brand-text demo text-body fw-bolder">{{ env('APP_NAME') }}</span>
+        <span class="app-brand-text demo text-body fw-bolder">{{  env("APP_NAME") }}</span>
     </a>
 </div>

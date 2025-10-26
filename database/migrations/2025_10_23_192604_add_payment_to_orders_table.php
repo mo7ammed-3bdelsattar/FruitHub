@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->enum('payment_method', ['online', 'on_delivery'])->default('on_delivery');
+            $table->enum('payment_method', ['online', 'cash'])->default('cash');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
         });
     }

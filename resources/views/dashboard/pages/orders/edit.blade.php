@@ -68,7 +68,7 @@
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{ __('Edit ')}}</h5>
-                    @if($order->payment_method == 'online' && $order->payment_statud == 'paid')
+                    @if($order->payment_method == 'online' && $order->payment_status == 'pending')
                     <form action="{{ route('dashboard.orders.update',$order->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf

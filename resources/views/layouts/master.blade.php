@@ -1,4 +1,6 @@
-<?php session(['pagination'=>\App\Models\Setting::first()->pagination])?>
+<?php
+  if(session('pagination') == null) session(['pagination'=>\App\Models\Setting::first()->pagination])
+ ?>
 <!DOCTYPE html>
 
 <html

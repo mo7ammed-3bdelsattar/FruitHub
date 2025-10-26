@@ -10,6 +10,7 @@ use App\Mail\OrderMail;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Category;
+use App\Jobs\OrderMailJob;
 use Illuminate\Http\Request;
 use App\Models\OrderTracking;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -67,6 +68,9 @@ class OrderController extends Controller
         if (!$order) {
             return redirect()->back()->with('error', 'there an error happind');
         }
+        if ($order->payment_method == 'online') {
+            return OrderService::orderPayment($order);
+        }
         return to_route('dashboard.orders.invoice', $order->id)->with('success', 'order taken successfully');
     }
 
@@ -122,7 +126,7 @@ class OrderController extends Controller
         ]);
         $order->orderTrackings()->create(['status' => $request->input('status')]);
         $order->update(['status' => $request->input('status')]);
-        if ($order->status == 'delivering') Mail::to($order->user->email)->send(new OrderMail($order, 'Your Order has been delivering'));
+        if ($order->status == 'delivering') OrderMailJob::dispatch($order);
         return true;
     }
 

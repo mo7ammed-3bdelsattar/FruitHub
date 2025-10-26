@@ -46,7 +46,8 @@ Route::middleware('auth.admin')->prefix('dashboard')->as('dashboard.')->group(fu
     Route::resource('/cities', CityController::class);
     Route::get('users/{id}/addresses', [AddressController::class, 'show'])->name('users.addresses');
 
-
+    Route::get('products/create/sheet',[ProductController::class,'createSheet'])->name('products.sheet');
+    Route::post('products/import',[ProductController::class,'import'])->name('products.import');
     Route::controller(AddressController::class)->prefix('/addresses')->as('addresses.')->group(function () {
         Route::get('/user/{id}', 'create')->name('user.create');
         Route::post('/user/{id}', 'store')->name('user.store');
@@ -73,5 +74,4 @@ Route::middleware('auth.admin')->prefix('dashboard')->as('dashboard.')->group(fu
 
 Route::get('/payment-success/{id}', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
-
 require __DIR__ . '/auth.php';

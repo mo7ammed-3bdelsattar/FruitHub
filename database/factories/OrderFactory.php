@@ -28,6 +28,8 @@ class OrderFactory extends Factory
             'total_price' => fake()->numberBetween(200, 1000),
             'subtotal_price' => fake()->numberBetween(150, 900),
             'status' => fake()->randomElement(['taken','preparing','delivering','received']),
+            'payment_method' => 'online',
+            'payment_status' => 'pending',
             'created_at' => now(),
             'updated_at' => now(),
         ];

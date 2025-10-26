@@ -6,10 +6,15 @@ use App\Models\Tag;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
+use App\Jobs\ImportProductsJob;
 use Illuminate\Pipeline\Pipeline;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Http\Requests\ProductFilterRequest;
 
 class ProductController extends Controller
@@ -123,6 +128,39 @@ class ProductController extends Controller
     {
         abort_if(!auth()->user()->can('delete products'), 403);
         $product->delete();
-        return redirect()->back()->with('success' , 'Product deleted successfully');
+        return redirect()->back()->with('success', 'Product deleted successfully');
+    }
+
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file',
+        ]);
+        $path = $request->file('file')->store('public/products/imports');
+        ImportProductsJob::dispatch($path); 
+        return to_route('dashboard.index')->with('success', 'All good!');
+    }
+
+    public function createSheet()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // العناوين
+        $sheet->fromArray(['title', 'description', 'price', 'category_id', 'discount'], null, 'A1');
+
+        for ($i = 2; $i <= 100002; $i++) {
+            $sheet->fromArray([
+                "Product " . ($i - 1),
+                "Description " . ($i - 1),
+                rand(10, 1000),
+                rand(1, 5),
+                rand(0, 50)
+            ], null, "A$i");
+        }
+        $writer = new Xlsx($spreadsheet);
+        $writer->save(storage_path('app/public/products.xlsx'));
+        return redirect()->back()->with('success', 'All is good');
     }
 }
